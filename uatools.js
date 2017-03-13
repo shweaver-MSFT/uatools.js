@@ -162,7 +162,7 @@
             return windowsBuildNumber >= 14393
         }
         else if(UATOOLS.IsIE()){
-            return width > 128;
+            return width > 128 || width <= 90;
         }
         
         return false;
