@@ -13,8 +13,9 @@ Once referenced, uatools.js allows you to call:
 **Experimental:**
 ==========
 * UATOOLS.IsWindowsAnniversaryUpdateOrAbove()
+* UATOOLS.IsWindowsFallCreatorsUpdateOrAbove()
 
-You can add a windows store button which only appear when your website is running on Windows Anniversary version or bigger.
+You can add a windows store button which only appear when your website is running on a specific Windows version or greater.
 
 First step: reference the uatools.js file.
 
