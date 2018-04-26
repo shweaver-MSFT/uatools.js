@@ -141,7 +141,7 @@
         return (UATOOLS.IsChrome() || UATOOLS.IsOpera()) && !!window.CSS;
     }
 
-     // Experimental
+    // Experimental
     UATOOLS.IsWindowsAnniversaryUpdateOrAbove = function () {
         // is it Windows 10 ?
         if (currentLowerUA.indexOf("windows nt 10") < 0) {
@@ -159,12 +159,39 @@
         }
         else if(UATOOLS.IsEdge()){
             var windowsBuildNumber = currentLowerUA.match("edge/[0-9]+.([0-9]+)")[1];
-            return windowsBuildNumber >= 14393
+            return windowsBuildNumber >= 14393;
         }
         else if(UATOOLS.IsIE()){
             return width > 128 || width <= 90;
         }
-        
+
+        return false;
+    }
+
+    // Experimental
+    UATOOLS.IsWindowsFallCreatorsUpdateOrAbove = function() {
+        // is it Windows 10 ?
+        if (currentLowerUA.indexOf("windows nt 10") < 0) {
+            return false;
+        }
+
+        //Hack using canvas and font size which was handled differently previous to RS3 (Lower than 1709)
+        var context = document.createElement('canvas').getContext('2d');
+
+        context.font = '64px Segoe UI Emoji'
+        var width = context.measureText('\uD83E\uDDD5\uD83C\uDFFD').width;
+
+        if (UATOOLS.IsChrome() || UATOOLS.IsFirefox() || UATOOLS.IsOpera()) {
+            return width <= 90;
+        }
+        else if(UATOOLS.IsEdge()){
+            var windowsBuildNumber = currentLowerUA.match("edge/[0-9]+.([0-9]+)")[1];
+            return windowsBuildNumber >= 16299;
+        }
+        else if(UATOOLS.IsIE()){
+            return width > 128 || width <= 90;
+        }
+
         return false;
     }
 

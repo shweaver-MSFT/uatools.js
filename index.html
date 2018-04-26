@@ -68,6 +68,11 @@
         </div>
         <hr />
         <div class="row">
+            <div class="col-xs-3 col-md-3 head">Is Windows Version >= RS3?</div>
+            <div class="col-xs-9 col-md-9" id="IsWindowsFallCreatorsUpdateOrAbove"></div>
+        </div>
+        <hr />
+        <div class="row">
             <div class="col-xs-3 col-md-3 head">
                 <p>Windows Store App Button (if you do not see it, your Windows version is not compatible)</p> 
                 <ul style="text-align:left;">
@@ -75,7 +80,7 @@
                     <li>First one got a fake campain id</li>
                 </ul>
             </div>
-            <div class="col-xs-9 col-md-9" id="IsWindowsAnniversaryUpdateOrAbove">
+            <div class="col-xs-9 col-md-9" >
                 <a class="winstore-link" data-winstore-id="9wzdncrfj364" data-winstore-cid="test" data-winstore-badge-size="small"></a>
                 <a class="winstore-link" data-winstore-id="9wzdncrfj364" data-winstore-appname="skype"></a>
                 <a class="winstore-link" data-winstore-id="9wzdncrfj364"data-winstore-badge-size="large"></a>
@@ -90,6 +95,7 @@
         
         //winver
         document.getElementById("IsWindowsAnniversaryUpdateOrAbove").innerHTML = UATOOLS.IsWindowsAnniversaryUpdateOrAbove();
+        document.getElementById("IsWindowsFallCreatorsUpdateOrAbove").innerHTML = UATOOLS.IsWindowsFallCreatorsUpdateOrAbove();
         
     </script>
 </body>
