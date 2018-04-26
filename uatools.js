@@ -21,11 +21,6 @@
     UATOOLS.GetStore = function () {
         // Get OS then
         var os = UATOOLS.GetOperatingSystem();
-        
-        // Features testing first
-        if (window.chrome && window.chrome.app && os !== "Windows Phone") {
-            return "Google Play";
-        }
 
         switch (os) {
             case "Windows Phone":
@@ -35,6 +30,9 @@
             case "iOS":
                 return "iTunes"; // Smart App Banner should be used as well
             default:
+                if (window.chrome && window.chrome.app && os !== "Windows Phone") {
+                    return "Google Play";
+                }
                 return os;
         }
     }
