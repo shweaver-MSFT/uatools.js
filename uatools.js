@@ -1,26 +1,25 @@
 ﻿var UATOOLS;
 
 (function (UATOOLS) {
-    var currentUA = navigator.userAgent || "";
-
-    var currentLowerUA = currentUA.toLowerCase();
+    const currentUA = navigator.userAgent || "";
+    const currentLowerUA = currentUA.toLowerCase();
 
     // Features
-    UATOOLS.IsTablet = function () {
+    UATOOLS.isTablet = function () {
         return currentLowerUA.indexOf("tablet") >= 0;
     }
 
-    UATOOLS.IsMobile = function () {
+    UATOOLS.isMobile = function () {
         return currentLowerUA.indexOf("mobile") >= 0;
     }
 
-    UATOOLS.GetUserAgentString = function () {
+    UATOOLS.getUserAgentString = function () {
         return currentUA;
     }
 
-    UATOOLS.GetStore = function () {
+    UATOOLS.getStore = function () {
         // Get OS then
-        var os = UATOOLS.GetOperatingSystem();
+        const os = UATOOLS.getOperatingSystem();
 
         switch (os) {
             case "Windows Phone":
@@ -37,7 +36,7 @@
         }
     }
 
-    UATOOLS.GetOperatingSystem = function () {
+    UATOOLS.getOperatingSystem = function () {
         // Windows Phone
         if (currentLowerUA.indexOf("windows phone") >= 0) {
             return "Windows Phone";
@@ -58,10 +57,12 @@
             return "iOS";
         }
 
+        // iPhone
         if (currentLowerUA.indexOf("iphone") >= 0) {
             return "iOS";
         }
 
+        // iPad
         if (currentLowerUA.indexOf("ipad") >= 0) {
             return "iOS";
         }
@@ -104,43 +105,105 @@
         return "Unknown operating system";
     }
 
-    UATOOLS.IsOpera = function () {
-        // Opera 8.0+
-        return (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
+    UATOOLS.getBrowser = function () {
+        if (UATOOLS.isOpera()) {
+            return 'Opera';
+        }
+
+        if (UATOOLS.isFirefox()) {
+            return 'Firefox';
+        }
+
+        if (UATOOLS.isSafari()) {
+            return 'Safari';
+        }
+
+        if (UATOOLS.isIE()) {
+            return 'Internet Explorer';
+        }
+
+        if (UATOOLS.isEdgeClassic()) {
+            return 'Edge Classic';
+        }
+
+        if (UATOOLS.isEdge()) {
+            return 'Edge Chromium';
+        }
+
+        if (UATOOLS.isChromium()) {
+            return 'Chrome';
+        }
+
+        if (UATOOLS.isBlink()) {
+            return 'Blink';
+        }
     }
 
-    UATOOLS.IsFirefox = function () {
+    UATOOLS.isOpera = function () {
+        // Opera 8.0+
+        return (!!window.opr && !!opr.addons) || !!window.opera || currentLowerUA.indexOf(' opr/') >= 0;
+    }
+
+    UATOOLS.isFirefox = function () {
         // Firefox 1.0+
         return typeof InstallTrigger !== 'undefined';
     }
 
-    UATOOLS.IsSafari = function () {
+    UATOOLS.isSafari = function () {
         // Safari <= 9 "[object HTMLElementConstructor]" 
         return Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
     }
 
-    UATOOLS.IsIE = function () {
+    UATOOLS.isIE = function () {
         // Internet Explorer 6-11
         return /*@cc_on!@*/false || !!document.documentMode;
     }
 
-    UATOOLS.IsEdge = function () {
+    UATOOLS.isEdgeClassic = function () {
         // Edge 20+
-        return !UATOOLS.IsIE() && !!window.StyleMedia;
+        return !UATOOLS.isIE() && !!window.StyleMedia;
     }
 
-    UATOOLS.IsChrome = function () {
+    UATOOLS.isEdge = function () {
+        // Edge Chromium
+        return currentLowerUA.indexOf(' edg/') >= 0;
+    }
+
+    UATOOLS.isChromium = function () {
         // Chrome 1+
-        return !!window.chrome && !!window.chrome.webstore;
+        return window.chrome && !UATOOLS.isEdge();
     }
 
-    UATOOLS.IsBlink = function () {
+    UATOOLS.isBlink = function () {
         // Blink engine detection
-        return (UATOOLS.IsChrome() || UATOOLS.IsOpera()) && !!window.CSS;
+        return (UATOOLS.isChromium() || UATOOLS.isOpera()) && !!window.CSS;
+    }
+
+    UATOOLS.isWindowsARM64 = function () {
+        // Windows ARM64 device
+        if (navigator.userAgent.indexOf("Windows") !== -1) {
+            if (window.external && 
+                // Check os-architecture
+                window.external.getHostEnvironmentValue && 
+                window.external.getHostEnvironmentValue('os-architecture').indexOf("ARM64") !== -1) {
+                return true;
+            }
+            else {
+                // Check webgl renderer
+                var canvas = document.createElement('canvas');
+                var gl = canvas.getContext('webgl');
+    
+                var debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+                var renderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
+                return renderer.indexOf("Qualcomm") !== -1;
+            }
+        }
+    
+        return false;
     }
 
     // Experimental
-    UATOOLS.IsWindowsAnniversaryUpdateOrAbove = function () {
+    UATOOLS.isWindowsAnniversaryUpdateOrAbove = function () {
         // is it Windows 10 ?
         if (currentLowerUA.indexOf("windows nt 10") < 0) {
             return false;
@@ -152,14 +215,14 @@
         context.font = '64px Segoe UI Emoji';
         var width = context.measureText('\uD83D\uDC31\u200D\uD83D\uDC64').width;
 
-        if (UATOOLS.IsChrome() || UATOOLS.IsFirefox() || UATOOLS.IsOpera()) {
+        if (UATOOLS.isChromium() || UATOOLS.isFirefox() || UATOOLS.isOpera() || UATOOLS.isEdge()) {
             return width <= 90;
         }
-        else if(UATOOLS.IsEdge()){
+        else if(UATOOLS.isEdgeClassic()){
             var windowsBuildNumber = currentLowerUA.match("edge/[0-9]+.([0-9]+)")[1];
             return windowsBuildNumber >= 14393;
         }
-        else if(UATOOLS.IsIE()){
+        else if(UATOOLS.isIE()){
             return width > 128 || width <= 90;
         }
 
@@ -167,7 +230,7 @@
     }
 
     // Experimental
-    UATOOLS.IsWindowsFallCreatorsUpdateOrAbove = function() {
+    UATOOLS.isWindowsFallCreatorsUpdateOrAbove = function() {
         // is it Windows 10 ?
         if (currentLowerUA.indexOf("windows nt 10") < 0) {
             return false;
@@ -179,14 +242,14 @@
         context.font = '64px Segoe UI Emoji'
         var width = context.measureText('\uD83E\uDDD5\uD83C\uDFFD').width;
 
-        if (UATOOLS.IsChrome() || UATOOLS.IsFirefox() || UATOOLS.IsOpera()) {
+        if (UATOOLS.isChromium() || UATOOLS.isFirefox() || UATOOLS.isOpera() || UATOOLS.isEdge()) {
             return width <= 90;
         }
-        else if(UATOOLS.IsEdge()){
+        else if(UATOOLS.isEdgeClassic()){
             var windowsBuildNumber = currentLowerUA.match("edge/[0-9]+.([0-9]+)")[1];
             return windowsBuildNumber >= 16299;
         }
-        else if(UATOOLS.IsIE()){
+        else if(UATOOLS.isIE()){
             return width > 128 || width <= 90;
         }
 
@@ -201,7 +264,7 @@
             var storeLink = storeLinks[i];
 
             //if windows version below anniversary
-            if(!UATOOLS.IsWindowsAnniversaryUpdateOrAbove()){
+            if(!UATOOLS.isWindowsAnniversaryUpdateOrAbove()){
                 //hide the link
                 storeLink.style.display = "none";
                 return;
