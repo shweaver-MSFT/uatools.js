@@ -3,28 +3,31 @@ uatools.js
 
 A set of tools to help you analyse user agent strings. The intent is not to provide a tool to help sniffing user agent but to help web developers to suggest right associated app based on right operating system.
 
-(STALE) You can try it live just [here](http://www.catuhe.com/uatools)
-
 Once referenced, uatools.js allows you to call:
-* UATOOLS.GetOperatingSystem()
-* UATOOLS.IsMobile()
-* UATOOLS.IsTablet()
+* UATOOLS.getUserAgentString(): string
+* UATOOLS.isMobile(): boolean
+* UATOOLS.isTablet(): boolean
+* UATOOLS.isEdge()
+* UATOOLS.isEdgeClassic()
+* UATOOLS.isIE()
+* UATOOLS.isWindowsARM64()
+* and more...
 
-**Experimental:**
+**Experimental**
 ==========
 * UATOOLS.IsWindowsAnniversaryUpdateOrAbove()
 * UATOOLS.IsWindowsFallCreatorsUpdateOrAbove()
 
-You can add a windows store button which only appear when your website is running on a specific Windows version or greater.
+You can also add a Windows Store button which only appear when your website is running on a specific Windows version or greater.
 
 First step: reference the uatools.js file.
 
 Then add an anchor :
 ``` 
-<a  class="winstore-link" 
-    data-winstore-id="9wzdncrfj364" 
-    data-winstore-cid="test" 
-    data-winstore-badge-size="small">
+<a class="winstore-link" 
+  data-winstore-id="9wzdncrfj364" 
+  data-winstore-cid="test" 
+  data-winstore-badge-size="small">
 </a>
 ```
 
