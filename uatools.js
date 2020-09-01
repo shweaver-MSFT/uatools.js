@@ -179,6 +179,8 @@
         return (UATOOLS.isChromium() || UATOOLS.isOpera()) && !!window.CSS;
     }
 
+    // by: David Rousset
+    // https://codepen.io/davrous/pen/yLNKBaV
     UATOOLS.isWindowsARM64 = function () {
         // Windows ARM64 device
         if (navigator.userAgent.indexOf("Windows") !== -1) {
